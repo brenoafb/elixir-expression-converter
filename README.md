@@ -1,6 +1,15 @@
 # ExpressionConverter
 
-**TODO: Add description**
+Convert Lisp's parenthesized expressions into Elixir expressions.
+
+```elixir
+❯ iex -S mix
+Erlang/OTP 23 [erts-11.1.7] [source] [64-bit] [smp:8:8] [ds:8:8:10] [async-threads:1] [hipe]
+
+Interactive Elixir (1.11.2) - press Ctrl+C to exit (type h() ENTER for help)
+iex(1)> ExpressionConverter.convert "(+ 1 2) (sum 1 2)"
+["1 + 2", "sum(1, 2)"]
+```
 
 ## Installation
 

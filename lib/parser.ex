@@ -33,13 +33,22 @@ defmodule Parser do
     {{:list, tokens}, remaining}
   end
 
+  defp next([")" | _tail]) do
+    {:error, "unmatched ')'"}
+  end
+
+  defp next(["\"" | tail]) do
+    {string_tokens, [_p | remaining]} =
+      tail |> Enum.split_while(fn x -> x != "\"" end)
+
+    string = string_tokens |> Enum.join(" ")
+
+    {{:string, string}, remaining}
+  end
+
   defp next(["'" | tail]) do
     {element, remaining} = next(tail)
     {{:quote, element}, remaining}
-  end
-
-  defp next([")" | _tail]) do
-    {:error, "unmatched ')'"}
   end
 
   defp next([token | tail]) do
@@ -57,9 +66,11 @@ defmodule Parser do
     {[list | tokens], remaining1}
   end
 
-  defp collect_tokens([token | tail]) do
-    {tokens, remaining} = collect_tokens(tail)
-    {[(get_element token) | tokens], remaining}
+  defp collect_tokens(tokens) do
+    {element, remaining} = next(tokens)
+    {elements, remaining1} = collect_tokens(remaining)
+
+    {[element | elements], remaining1}
   end
 
   @doc """

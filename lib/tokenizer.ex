@@ -19,5 +19,5 @@ defmodule Tokenizer do
     |> String.split
   end
 
-  defp special_chars, do: ["(", ")", "'"]
+  defp special_chars, do: ["(", ")", "'", "\""]
 end

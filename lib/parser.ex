@@ -18,7 +18,7 @@ defmodule Parser do
   def parse(tokens) do
     case next(tokens) do
       {:error, _message} = e -> e
-      {parsed, remaining} -> [parsed | parse remaining]
+      {parsed, remaining} -> [parsed | parse(remaining)]
     end
   end
 
@@ -38,8 +38,7 @@ defmodule Parser do
   end
 
   defp next(["\"" | tail]) do
-    {string_tokens, [_p | remaining]} =
-      tail |> Enum.split_while(fn x -> x != "\"" end)
+    {string_tokens, [_p | remaining]} = tail |> Enum.split_while(fn x -> x != "\"" end)
 
     string = string_tokens |> Enum.join(" ")
 
@@ -52,7 +51,7 @@ defmodule Parser do
   end
 
   defp next([token | tail]) do
-    {(get_element token), tail}
+    {get_element(token), tail}
   end
 
   @doc """
@@ -78,17 +77,16 @@ defmodule Parser do
   """
   defp get_element(token) do
     try do
-      float = token |> String.to_float
+      float = token |> String.to_float()
       {:float, float}
     rescue
-      ArgumentError -> try do
-        int = token |> String.to_integer
-        {:int, int}
-      rescue
-        ArgumentError -> {:atom, String.to_atom token}
-      end
-
+      ArgumentError ->
+        try do
+          int = token |> String.to_integer()
+          {:int, int}
+        rescue
+          ArgumentError -> {:atom, String.to_atom(token)}
+        end
     end
   end
-
 end

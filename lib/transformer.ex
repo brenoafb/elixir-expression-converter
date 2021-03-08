@@ -6,6 +6,8 @@ defmodule Transformer do
 
   def transform({:float, x}), do: x
 
+  def transform({:string, string}), do: string
+
   def transform({:atom, atom}) do
     {atom, [], Elixir}
   end

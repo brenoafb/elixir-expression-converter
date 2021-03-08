@@ -8,8 +8,10 @@ defmodule ExpressionConverter do
 
   ## Examples
 
-      iex> ExpressionConverter.hello()
-      :world
+      iex> "(+ 1 2)" |> ExpressionConverter.convert
+      ["1 + 2"]
+      iex> "(sum 1 2)" |> ExpressionConverter.convert
+      ["sum(1, 2)"]
 
   """
   def hello do
@@ -18,9 +20,9 @@ defmodule ExpressionConverter do
 
   def convert(input) do
     input
-    |> Tokenizer.tokenize
-    |> Parser.parse
-    |> Enum.map(fn x -> Transformer.transform x end)
-    |> Enum.map(fn x -> Macro.to_string x end)
+    |> Tokenizer.tokenize()
+    |> Parser.parse()
+    |> Enum.map(fn x -> Transformer.transform(x) end)
+    |> Enum.map(fn x -> Macro.to_string(x) end)
   end
 end
